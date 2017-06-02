@@ -1,0 +1,9 @@
+.calendar-week span{
+  float: left;
+  width: 14.28%;
+  font-size: 1.6em;
+  line-height: 34px;
+  text-align: center;
+  font-size: 0.32rem;
+  color: #888;
+}
