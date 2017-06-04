@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>幼小衔接日历题库</title>
-    <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+    <meta  name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
     <meta name="format-detection" content="telephone=no, email=no"/>
       <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" href="../src/calendar.css">
@@ -12,15 +12,18 @@
     <div id="calendar" class="calendar">
     </div>
     <script src="../src/calendar.js"></script>
+    <!--<script src="../src/test.js"></script>-->
     <script>
-      window.onload = function () {
-        new Calendar("calendar", {
-          callback: "handleCallback"
-        })
-      }
-      function handleCallback () {
-        
-      }
+      window.addEventListener('load',
+        function() {
+            new Calendar("calendar", {
+              callback: showContent
+            });
+        },
+        false);
+        function showContent(val) {
+          console.log(val)
+        }
     </script>
   </body>
 </html>
