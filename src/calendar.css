@@ -51,6 +51,8 @@
     display: -moz-box;
     display: box;
     width: 300%;
+    overflow: hidden;
+    height: 40px;
     /*height: 210px;*/
     z-index: 5;
     -webkit-transform: translate3D(-33.3333%, 0, 0);
@@ -99,7 +101,7 @@
     color: #ef2121;
 }*/
 
-.calendar .calendar-list .expire,
+/*.calendar .calendar-list .expire,
 .calendar .calendar-list .expire.pasted {
     color: #B5B5B5;
 }
@@ -108,7 +110,7 @@
 }
 .calendar .calendar-list .expire:active {
     color: #B5B5B5;
-}
+}*/
 
 .calendar .calendar-list .pasted.shield:before,
 .calendar .calendar-list .pasted.shield:after {
@@ -130,13 +132,13 @@
 .calendar .calendar-list .next-m {
     color: #ededed;
 }
-.calendar .calendar-list .today.prev-m,
+/*.calendar .calendar-list .today.prev-m,
 .calendar .calendar-list .today.next-m,
 .calendar .calendar-list .today.prev-m:active,
 .calendar .calendar-list .today.next-m:active {
     color: #fff;
     background-color: #CAFCD1;
-}
+}*/
 
 .calendar .calendar-list .today,
 .calendar .calendar-list .today:active {

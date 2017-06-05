@@ -11,6 +11,7 @@
   <body>
     <div id="calendar" class="calendar">
     </div>
+    <script src="../src/zepto.min.js"></script>
     <script src="../src/calendar.js"></script>
     <!--<script src="../src/test.js"></script>-->
     <script>
@@ -22,7 +23,8 @@
         },
         false);
         function showContent(val) {
-          console.log(val)
+          console.log(val);
+          document.getElementById('calendar-content').innerHTML = "已选择了日期：" + val;
         }
     </script>
   </body>
