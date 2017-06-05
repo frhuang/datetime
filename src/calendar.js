@@ -3,7 +3,7 @@ function Calendar(el, options) {
   this.calendarList = this.createElement('div', {
     "class": "calendar-list"
   });
-  this.monthLabel = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
+ 
   var date = new Date();
   this.past = false;
   this.state = 0;  //0为折叠状态 1为正在拉开状态 2为展开状态
@@ -53,11 +53,11 @@ Calendar.prototype = {
   createHeader: function () {
 
     var date = new Date();
-    var monthLabel = this.monthLabel[date.getMonth()] + "月" + date.getFullYear();
     var month = this.createElement('div', {
       "class": "calendar-title"
-    }, monthLabel);
+    });
     this.wrapper.appendChild(month);
+    this.setDateTitle(date.getFullYear(), date.getMonth());
 
     var week = this.createElement('div', {
       "class": "calendar-week"
@@ -76,9 +76,14 @@ Calendar.prototype = {
   initFoldList: function () {
     var self = this;
     var date = new Date();
-    var currentMonth = date.getMonth() + 1;
-    var currentYear = date.getFullYear();
+    var currentMonth = self.relativeMonth = date.getMonth() + 1;
+    var currentYear = self.relativeYear = date.getFullYear();
     var curDate = date.getDate() - date.getDay();
+    self.activeJSON = {
+      y: currentYear,
+      m: currentMonth,
+      d: date.getDate()
+    }
     var prev = this.getDayData(curDate - 7, currentMonth, currentYear);
     var now = this.getDayData(curDate, currentMonth, currentYear);
     var next = this.getDayData(curDate + 7, currentMonth, currentYear);
@@ -109,7 +114,7 @@ Calendar.prototype = {
         } else {
           self.setUnfoldJson(self.activeJSON.y, self.activeJSON.m + 1);
         }
-        self.transitions(obj, dir);
+        self.transitions(obj, dir, true);
       }
     });
     //增加日历节点
@@ -118,11 +123,6 @@ Calendar.prototype = {
     var dateValue = $('.today').attr('data-calen');
     if (typeof self.options.callback === 'function') {
       self.options.callback(dateValue);
-      self.activeJSON = {
-        y: currentYear,
-        m: currentMonth,
-        d: date.getDate()
-      }
     }
     self.documentSwitch();
   },
@@ -143,7 +143,7 @@ Calendar.prototype = {
     var self = this;
     var oList = this.createElement('div');
     if (setTitle === 'now') {
-      document.querySelector('.calendar-title').innerHTML = self.monthLabel[data.m - 1] + "月" + data.y;
+      self.setDateTitle(self.activeJSON.y, self.activeJSON.m - 1);
       oList.classList.add('now-box');
     } else if(setTitle === 'prev') {
       oList.classList.add('prev-box');
@@ -170,8 +170,15 @@ Calendar.prototype = {
       var aEle = self.createElement('a', {
          "data-calen": [year, month, day].join('/')
       }, day);
-      if (curDate.getFullYear() === year && curDate.getMonth() + 1 === month && curDate.getDate() === day) {
-        aEle.classList.add('today', 'active');
+      if (curDate.getFullYear() === year 
+      && curDate.getMonth() + 1 === month 
+      && curDate.getDate() === day) {
+        aEle.classList.add('today');
+      }
+      if (year === self.activeJSON.y 
+      && month === self.activeJSON.m 
+      && day === self.activeJSON.d) {
+        aEle.classList.add('active');
       }
       spanEle.appendChild(aEle);
       oList.appendChild(spanEle);
@@ -188,9 +195,9 @@ Calendar.prototype = {
   },
   setUnfoldJson: function (curYear, curMonth) {
     var self = this;
-    if (curMonth < 0) {
+    if (curMonth <= 0) {
       curMonth = 12;
-      curYear -= 1;
+      curYear--;
     }
     if (curMonth > 12) {
       curMonth = 1;
@@ -201,13 +208,13 @@ Calendar.prototype = {
     var prevMonth = curMonth - 1;
     var nextMonth = curMonth + 1;
     var prevYear = nextYear = curYear;
-    if (prevMonth < 0) {
+    if (prevMonth <= 0) {
       prevMonth = 12;
       prevYear --;
     }
     if (nextMonth > 12) {
       nextMonth = 1;
-      nextYear += 1;
+      nextYear ++;
     }
     self.unfoldJSON.prev = {
       y: prevYear,
@@ -226,7 +233,10 @@ Calendar.prototype = {
    * 插入展开的日历对象 
    */
   appendUnfoldList: function (data, callback) {
+    console.log(this.activeJSON)
     this.calendarList.innerHTML = '';
+    this.relativeMonth = data.now.m;
+    this.relativeYear = data.now.y;
 
     this.calendarList.appendChild(this.createCalenList(data.prev, "prev"));
     this.calendarList.appendChild(this.createCalenList(data.now, "now"));
@@ -241,7 +251,7 @@ Calendar.prototype = {
     var self = this;
     var oList = this.createElement('div');
     if (setTitle === 'now') {
-      document.querySelector('.calendar-title').innerHTML = self.monthLabel[data.m - 1] + "月" + data.y;
+      self.setDateTitle(data.y, data.m - 1);
       oList.classList.add('now-box');
     } else if(setTitle === 'prev') {
       oList.classList.add('prev-box');
@@ -292,15 +302,17 @@ Calendar.prototype = {
         data.m === curMonth &&
         curDate === day
       ) {
-        dayEle.classList.add('today', 'active');
+        dayEle.classList.add('today');
       }
       if (day === 1) {
         dayEle.classList.add('first-day');
       }
-      if (data.y == self.activeJSON.y
-      && data.m == self.activeJSON.m
-      && day == self.activeJSON.d) {
+      // console.log(data.y, data.m, day, self.activeJSON.y, self.activeJSON.m, self.activeJSON.d)
+      if (data.y === self.activeJSON.y
+      && data.m === self.activeJSON.m
+      && day === self.activeJSON.d) {
         dayEle.classList.add('active');
+        console.log('active');
       }
       spanEle.appendChild(dayEle);
       oList.appendChild(spanEle);
@@ -338,23 +350,28 @@ Calendar.prototype = {
   /**
    * 切换月份动画
    */
-  transitions: function (obj, dir) {
+  transitions: function (obj, dir, isFirst) {
     var self = this;
     obj.classList.add('slide', dir > 0 ? 'prev-to': 'next-to');
+    console.log(self.activeJSON);
+    console.log(self.unfoldJSON);
     setTimeout(function end () {
-      self.activeJSON = {};
       self.appendUnfoldList(self.unfoldJSON, function () {
         obj.classList.remove('slide', 'prev-to', 'next-to');
         self.addEvent();
-        var activeEle = $('.now-box .first-day')[0];
-        activeEle.classList.add('active');
-        var str = activeEle.getAttribute('data-calen');
-        var date = self.parseStrToDate(str);
-        self.activeJSON = {
-          y: date.y,
-          m: date.m,
-          d: date.d
-        };
+        if (isFirst) {
+          $('.now-box .active').removeClass('active');
+          self.activeJSON = {};
+          var activeEle = $('.now-box .first-day')[0];
+          activeEle.classList.add('active');
+          var str = activeEle.getAttribute('data-calen');
+          var date = self.parseStrToDate(str);
+          self.activeJSON = {
+            y: date.y,
+            m: date.m,
+            d: date.d
+          };
+        }
       })
     }, 500);
   },
@@ -365,19 +382,25 @@ Calendar.prototype = {
     var self = this;
     obj.classList.add('slide', dir > 0 ? 'prev-to': 'next-to');
     setTimeout(function end () {
-      self.activeJSON = {};
+      // self.activeJSON = {};
+      self.activeJSON = {
+          y: self.foldJSON.now.y,
+          m: self.foldJSON.now.m,
+          d: self.foldJSON.now.d
+        };
       self.appendFoldList(self.foldJSON, function () {
         obj.classList.remove('slide', 'prev-to', 'next-to');
         self.addEvent();
+        $('.active').removeClass('active');
         var activeEle = $('.now-box span a')[0];
         activeEle.classList.add('active');
         var str = activeEle.getAttribute('data-calen');
         var date = self.parseStrToDate(str);
-        self.activeJSON = {
-          y: date.y,
-          m: date.m,
-          d: date.d
-        };
+        // self.activeJSON = {
+        //   y: date.y,
+        //   m: date.m,
+        //   d: date.d
+        // };
         if (typeof self.options.callback === 'function') {
           self.options.callback(str);
         }
@@ -429,9 +452,6 @@ Calendar.prototype = {
     }
   },
   documentSwitch: function() {
-    // document.onmousedown = start;
-    // document.onmousemove = move;
-    // document.onmouseup = end;
     document.addEventListener('touchstart', start, false);
     document.addEventListener('touchmove', move, false);
     document.addEventListener('touchend', end, false);
@@ -477,8 +497,29 @@ Calendar.prototype = {
     function resetFold() {
       clearTimeout(time);
       self.state = 0;
-      self.initFoldList();
+      var currentMonth = self.activeJSON.m;
+      var currentYear = self.activeJSON.y;
+
+      var date = new Date(currentYear, currentMonth - 1, self.activeJSON.d);
+      var curDate = date.getDate() - date.getDay();
+      var prev = self.getDayData(curDate - 7, currentMonth, currentYear);
+      var now = self.getDayData(curDate, currentMonth, currentYear);
+      var next = self.getDayData(curDate + 7, currentMonth, currentYear);
+      self.foldJSON.prev = prev;
+      self.foldJSON.now = now;
+      self.foldJSON.next = next;
+      self.appendFoldList(self.foldJSON, self.addEvent.bind(self));
     }
+  },
+  /**
+   * 更新月份和年份标题
+   */
+  setDateTitle: function (year, month) {
+    var monthLabel = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
+    $('.calendar-title').html(monthLabel[month] + '月' + year);
+    this.relativeMonth = month + 1;
+    this.relativeYear = year;
+
   },
   /**
    * 设置日历事件
@@ -488,8 +529,21 @@ Calendar.prototype = {
     $('.calendar-list a').on('click', function (e) {
       $('.calendar-list a').removeClass('active');
       $(this).addClass('active');
+      var str = $(this).attr('data-calen');
+      self.activeJSON = self.parseStrToDate(str);
       if (typeof self.options.callback === 'function') {
         self.options.callback($(this).attr('data-calen'));
+      }
+      var curMonth = self.activeJSON.m;
+      if (curMonth != self.relativeMonth) {
+        console.log(self.relativeMonth, curMonth, self.state);
+        if (self.state === 2) {
+          var dir = curMonth > self.relativeMonth ? -1 : 1;
+          self.setUnfoldJson(self.activeJSON.y, curMonth);
+          self.transitions(self.calendarList, dir, false);
+        } else if (self.state === 0) {
+          self.setDateTitle(self.activeJSON.y, curMonth - 1);
+        }
       }
     })
   },
@@ -499,12 +553,12 @@ Calendar.prototype = {
     var newDate = new Date(year, month, 1);  
     newDate.setDate(0);
     var totalDay = newDate.getDate();
-    if(date < 0) {
+    if(date <= 0) {
       month -= 1;
       newDate = new Date(year, month, 1);  
       newDate.setDate(0);
       date += newDate.getDate();
-      if (month < 0) {
+      if (month <= 0) {
         month = 12;
         year -= 1;
       } 
