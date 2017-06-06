@@ -7,44 +7,70 @@
     <meta name="format-detection" content="telephone=no, email=no"/>
       <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" href="../src/calendar.css">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
   </head>
   <body>
     <div id="calendar" class="calendar">
     </div>
+    <div id="calendar-content"></div>
     <script src="../src/zepto.min.js"></script>
     <script src="../src/calendar.js"></script>
     <!--<script src="../src/test.js"></script>-->
     <script>
-      window.addEventListener('load',
-        function() {
-            new Calendar("calendar", {
-              callback: showContent
-            });
-        },
-        false);
-        function showContent(val) {
-          console.log(val);
-          var liStr = '<ul>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          <li>123123123</li>\
-          </ul>'
-          $('#calendar-content').html(val);
+      var totalData = null;
+      var timeDelay = null;
+      var calendar = null;
+      var strArray = ["心里调整：", "行为习惯训练：", "专注力训练：", "常识训练：", "逻辑训练："]
+      $.getJSON('./db.json', function (data) {
+        totalData = data;
+        if (calendar != null) {
+          calendar.refresh(data);
         }
+      });
+      $(document).ready(function () {
+        calendar = new Calendar("calendar", {
+            callback: showContent
+        });
+      });
+      function showContent(val) {
+        if (totalData === null) {
+          var str = '<p class="no-data">暂无学前计划</p>'
+          $('#calendar-content').html(str);
+          timeDelay = setTimeout(function() {
+            showContent(val);
+          }, 200);
+          return;
+        };
+        clearTimeout(timeDelay);
+        if (totalData[val]) {
+          var data = totalData[val]; 
+          var str = "";
+          for (var i = 0; i < data.length; i++) {
+            str += '<div class="content-list">'
+              + '<div class="content-title"><span class="content-type type'+ data[i].type +'">' + strArray[data[i].type - 1] + '</span>' 
+              + '<span>' + data[i].title + '</span></div>'
+              + '<div class="content-img"><img src="' + data[i].content +'" class="img-cc" /></div>'
+              + '</div>';
+          }
+          $('#calendar-content').html(str);
+        } else {
+          var str = '<p class="no-data">暂无学前计划</p>'
+          $('#calendar-content').html(str);
+        }
+        var len = $('.img-cc').length;
+        var imgArr = [];
+        var imgCC = $('.img-cc');
+        for (var i = 0; i < len; i++) {
+          imgArr.push(imgCC[i].src);
+        }
+        $('.img-cc').on('click', function () {
+          var str = $(this)[0].src;
+          wx.previewImage({
+              current: str, // 当前显示图片的http链接
+              urls: imgArr // 需要预览的图片http链接列表
+          });
+        });
+      } 
     </script>
   </body>
 </html>

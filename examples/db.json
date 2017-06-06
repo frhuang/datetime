@@ -1,0 +1,191 @@
+{
+  "2017/6/14": [
+    {
+      "type": 1,
+      "title": "粑粑麻麻，我是小学生啦，请叫我“XX同学”噢~",
+      "content": "./img/day1_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "本周行为习惯从生活能力训练开始！",
+      "content": "./img/day1_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day1_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "生物常识",
+      "content": "./img/day1_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "语言逻辑",
+      "content": "./img/day1_5.jpg"
+    }
+  ],
+  "2017/6/15": [
+    {
+      "type": 1,
+      "title": "我是XX同学，主动帮忙拿碗筷是我应该的！",
+      "content": "./img/day2_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "粑粑麻麻相信我，以后我会在30分钟内吃完饭！",
+      "content": "./img/day2_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day2_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "生物常识",
+      "content": "./img/day2_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "语言逻辑",
+      "content": "./img/day2_5.jpg"
+    }
+  ],
+  "2017/6/16": [
+    {
+      "type": 1,
+      "title": "我是XX同学，寄己的事情要寄己做！",
+      "content": "./img/day3_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "我知道的，每天最多1小时电视时间！",
+      "content": "./img/day3_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day3_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "大小常识",
+      "content": "./img/day3_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "数字逻辑",
+      "content": "./img/day3_5.jpg"
+    }
+  ],
+  "2017/6/17": [
+    {
+      "type": 1,
+      "title": "如果我没有坚持，粑粑麻麻要督促我噢！",
+      "content": "./img/day4_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "粑粑麻麻，我的屁屁我做主！绝对干净香香~",
+      "content": "./img/day4_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day4_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "生活常识",
+      "content": "./img/day4_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "数字逻辑",
+      "content": "./img/day4_5.jpg"
+    }
+  ],
+  "2017/6/18": [
+    {
+      "type": 1,
+      "title": "来给我！这袋垃圾我帮你扔！",
+      "content": "./img/day5_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "晚上9点睡觉，第二天才会精神棒棒的！家长要严格执行噢！",
+      "content": "./img/day5_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day5_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "生活常识",
+      "content": "./img/day5_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "语言逻辑",
+      "content": "./img/day5_5.jpg"
+    }
+  ],
+  "2017/6/19": [
+    {
+      "type": 1,
+      "title": "粑粑，袋子有点重，你帮我一起拿吧！",
+      "content": "./img/day6_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "赖床的都是小屁孩！谁都不许赖床噢！",
+      "content": "./img/day6_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day6_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "生活常识",
+      "content": "./img/day6_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "数字逻辑",
+      "content": "./img/day6_5.jpg"
+    }
+  ],
+  "2017/6/20": [
+    {
+      "type": 1,
+      "title": "当XX同学已经一周，我想说…",
+      "content": "./img/day7_1.jpg"
+    },
+    {
+      "type": 2,
+      "title": "我是生活小能手，我爱叠被子！",
+      "content": "./img/day7_2.jpg"
+    },
+    {
+      "type": 3,
+      "title": "简单专注1分钟",
+      "content": "./img/day7_3.jpg"
+    },
+    {
+      "type": 4,
+      "title": "生活常识",
+      "content": "./img/day7_4.jpg"
+    },
+    {
+      "type": 5,
+      "title": "语言逻辑",
+      "content": "./img/day7_5.jpg"
+    }
+  ]
+}
